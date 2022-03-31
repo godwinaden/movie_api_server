@@ -10,6 +10,12 @@ sqlalchemy = "*"
 pytest = "*"
 pytest-asyncio = "*"
 pytest-cov = "*"
+automium-web = "*"
+schemas = "*"
+sqlalchemy-utils = "*"
+cryptography = "*"
+starlette = "*"
+pydantic = "*"
 
 [dev-packages]
 
