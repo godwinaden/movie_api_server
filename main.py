@@ -9,14 +9,14 @@ from sqlalchemy.orm import Session
 from starlette.middleware.cors import CORSMiddleware
 from starlette.status import HTTP_403_FORBIDDEN
 
+from feeds.atom_feed import LatestAtomFeed
+from feeds.rss_feed import LatestRssFeed
 from sql_app.models import movie_model, api_key_model
 from sql_app.repositories.api_key_repository import ApiKeyRepo
 from sql_app.repositories.movie_repository import MovieRepo
 from sql_app.schemas.api_key_schema import ApiKey, ApiKeyCreate, ApiDomain
 from sql_app.schemas.movie_schema import Movie, MovieCreate
 from sqlite_db.sqlite import engine, get_db
-
-api_key_header = APIKeyHeader(name="Bearer", auto_error=True)
 
 app = FastAPI(title="Movie API Server",
               description="get more deep info about movies.",
@@ -32,6 +32,7 @@ app.add_middleware(
 
 movie_model.Base.metadata.create_all(bind=engine)
 api_key_model.Base.metadata.create_all(bind=engine)
+api_key_header = APIKeyHeader(name="Authorization", auto_error=False)
 
 
 async def validate_public_key(api_token: str = Security(api_key_header)):
@@ -54,6 +55,18 @@ def home(db: Session = Depends(get_db)):
     MovieRepo.fetch_all(db)
 
 
+@app.get('/feeds/rss', tags=["rss"], response_model=List[Movie])
+def get_rss_feeds(db: Session = Depends(get_db)):
+    rss = LatestRssFeed(title="Hey", price=34.00, description="hello Again", link="")
+    return rss.items(db)
+
+
+@app.get('/feeds/atom', tags=["atom"], response_model=List[Movie])
+def get_atom_feeds(db: Session = Depends(get_db)):
+    rss = LatestAtomFeed(title="Hey", subtitle="What happened", price=34.00, description="hello Again", link="")
+    return rss.items(db)
+
+
 @app.post('/movies', tags=["Movie"], response_model=Movie, status_code=201)
 async def create_movie(
         movie_request: MovieCreate,
@@ -63,7 +76,7 @@ async def create_movie(
     """
     Create a movie and store it in the database
     """
-    db_existing_key = ApiKeyRepo.fetch_by_public(db, api_key)
+    db_existing_key = ApiKeyRepo.fetch_by_public(db, api_key[7:])
     if db_existing_key:
         db_movie = MovieRepo.fetch_by_title_and_subtitle(db, title=movie_request.title, subtitle=movie_request.subtitle)
         if db_movie:

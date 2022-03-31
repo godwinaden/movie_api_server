@@ -16,6 +16,10 @@ sqlalchemy-utils = "*"
 cryptography = "*"
 starlette = "*"
 pydantic = "*"
+feedgenerator = "*"
+pytest-benchmark = "*"
+asyncio = {extras = ["startups"], version = "*"}
+requests = "*"
 
 [dev-packages]
 

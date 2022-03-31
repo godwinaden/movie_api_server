@@ -54,13 +54,13 @@ class ApiKeyRepo:
         return updated_api_key
 
     @staticmethod
-    def generate_public_key(length: int = 20) -> str:
+    def generate_public_key(length: int = 50) -> str:
         choices = string.ascii_letters + string.digits
         alt_chars = ''.join([choices[ord(os.urandom(1)) % 62] for _ in range(2)]).encode("utf-8")
         api_key = base64.b64encode(os.urandom(length), altchars=alt_chars).decode("utf-8")
         return api_key
 
     @staticmethod
-    def generate_secret_key(length: int = 25) -> str:
+    def generate_secret_key(length: int = 50) -> str:
         key = ''.join(random.choice(string.ascii_lowercase + string.digits) for x in range(length))
         return key
