@@ -23,7 +23,7 @@ use the following code to run it.
 
 if your environment is well setup, you will have everything work fine on the browser.
 
-###Testing
+### Testing
 To keep the work simple, only few unit test was done using pytest. I intended to use Pytest-benchmark to
 measure memory and cpu usage and performance for each method/function but because of time constraints on my part, 
 I decided to leave it for another time. I will keep updating this repository in the future to code in other or missing
@@ -31,6 +31,7 @@ test cases. To run the test, use the following code:
 
             python -m pytest test --asyncio-mode=strict --cov
            
-###Thanks
+### Thanks
+
 Thanks for the patience and the opportunity to carry out this technical test for the role of
 Senior Python Engineer. I hope and anticipate taking the role. Thanks again.
